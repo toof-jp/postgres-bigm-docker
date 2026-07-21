@@ -1,7 +1,8 @@
-ARG BASE_IMAGE=postgres:18
+ARG BASE_IMAGE=ghcr.io/cloudnative-pg/postgresql:18-standard-trixie
 ARG PGBIGM_VERSION=1.2-20250903
 
 FROM ${BASE_IMAGE} AS builder
+USER root
 ARG PGBIGM_VERSION
 ENV PGBIGM_TAG=v${PGBIGM_VERSION}
 ENV INSTALL_DIR=/tmp/install
@@ -25,7 +26,7 @@ RUN wget -O pg_bigm.tar.gz \
     && make USE_PGXS=1 DESTDIR=${INSTALL_DIR} install
 
 FROM ${BASE_IMAGE}
+USER root
 COPY --from=builder /tmp/install/usr/lib/postgresql/ /usr/lib/postgresql/
 COPY --from=builder /tmp/install/usr/share/postgresql/ /usr/share/postgresql/
-
-RUN echo "shared_preload_libraries = 'pg_bigm'" >> /usr/share/postgresql/postgresql.conf.sample
+USER postgres

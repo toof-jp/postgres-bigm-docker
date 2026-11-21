@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/cloudnative-pg/postgresql:18-standard-trixie
+ARG BASE_IMAGE=ghcr.io/cloudnative-pg/postgresql:19-standard-trixie
 ARG PGBIGM_VERSION=1.2-20250903
 
 FROM ${BASE_IMAGE} AS builder
